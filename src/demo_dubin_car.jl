@@ -18,7 +18,6 @@ struct ExperimentEnvironment
     obstacles::Array{ObstacleLocation,1}
 end
 
-
 #State
 struct VehicleState <: FieldVector{3,Float64}
     x::Float64
@@ -99,9 +98,10 @@ struct node_cost <: Function
     env::ExperimentEnvironment
 end
 
-function (obj::node_cost)(goal,vehicle_state,action,time_stamp)
+function (obj::node_cost)(old_vehicle_state,new_vehicle_state,action,time_stamp)
 
     total_cost = 0.0
+    vehicle_state = new_vehicle_state
     vehicle_x = vehicle_state.x
     vehicle_y = vehicle_state.y
     vehicle_L = obj.wheelbase
@@ -148,11 +148,11 @@ end
 
 #Heuristic Cost
 struct heuristic_cost <: Function
-    env::ExperimentEnvironment
+    goal::Location
 end
 
-function (obj::heuristic_cost)(goal, vehicle_state)
-    world = obj.env
+function (obj::heuristic_cost)(vehicle_state)
+    goal = obj.goal
     euclidean_distance =  sqrt( (vehicle_state.x - goal.x)^2 + (vehicle_state.y - goal.y)^2 )
     direct_line_to_goal_slope = wrap_between_0_and_2Pi(atan(goal.y-vehicle_state.y,goal.x-vehicle_state.x))
     orientation_cost = 10* dot( (cos(direct_line_to_goal_slope), sin(direct_line_to_goal_slope)) ,
@@ -166,8 +166,17 @@ function main()
     holonomic_vs = VehicleState(10.0,20.0,0.0)
     holonomic_va = get_vehicle_actions(45,5)
     g = Location(75.0,95.0)
-    nc = node_cost(0.5, e)
-    hc = heuristic_cost(e)
+    nc = node_cost(0.5,e)
+    hc = heuristic_cost(g)
     cs = hybrid_astar_search(g, holonomic_vs, holonomic_va, holonomic_vehicle_dynamics, get_node_key, nc, hc)
     return cs
 end
+
+
+#=
+using JET
+using BenchmarkTools
+@report_opt hybrid_astar_search(g, holonomic_vs, holonomic_va, holonomic_vehicle_dynamics, get_node_key, nc, hc)
+@profiler hybrid_astar_search(g, holonomic_vs, holonomic_va, holonomic_vehicle_dynamics, get_node_key, nc, hc)
+@benchmark hybrid_astar_search($g, $holonomic_vs, $holonomic_va, holonomic_vehicle_dynamics, get_node_key, nc, hc)
+=#
