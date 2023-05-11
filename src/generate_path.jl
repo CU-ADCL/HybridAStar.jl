@@ -20,7 +20,7 @@ function hybrid_astar_search(goal, agent_state, agent_actions, agent_dynamics, n
     nodes_dict = Dict{key_type,GraphNode{state_type,action_type,key_type}}()
     path = typeof(agent_actions)()
 
-    h = heuristic_cost(goal, agent_state)
+    h = heuristic_cost(agent_state)
     open[k] = h
     start_node = GraphNode{state_type,action_type,key_type}(agent_state,k,0.0,h,nothing,nothing,depth)
     nodes_dict[k] = start_node
@@ -47,9 +47,9 @@ function hybrid_astar_search(goal, agent_state, agent_actions, agent_dynamics, n
                 continue
             else
                 #Calculate actual cost of the new node
-                g = current_node.actual_cost + (λ^new_depth)*node_cost(goal,new_agent_state,action,new_depth)
+                g = current_node.actual_cost + (λ^new_depth)*node_cost(current_agent_state,new_agent_state,action,new_depth)
                 #Calculate heuristic cost of the new node
-                h = heuristic_cost(goal, new_agent_state)
+                h = heuristic_cost(new_agent_state)
                 #Define new graph node
                 new_node = GraphNode{state_type,action_type,key_type}(new_agent_state,new_node_key,g,h,current_node.key,action,new_depth)
 
