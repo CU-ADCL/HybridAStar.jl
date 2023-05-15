@@ -1,5 +1,4 @@
 using LinearAlgebra
-using StaticArrays
 
 struct Location
     x::Float64
