@@ -1,0 +1,4 @@
+[deps]
+DomainSets = "5b8099bc-c8ec-5219-889f-1d9e522a28bf"
+HybridAStar = "104e9f6a-5342-4eaa-ade7-423d5ab614aa"
+StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
