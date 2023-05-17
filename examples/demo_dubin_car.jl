@@ -18,7 +18,7 @@ struct ExperimentEnvironment
 end
 
 #State
-struct VehicleState <: FieldVector{3,Float64}
+struct VehicleState
     x::Float64
     y::Float64
     theta::Float64
@@ -73,7 +73,7 @@ function holonomic_vehicle_dynamics(vehicle_state::VehicleState,delta_angle)
 end
 
 #NodeKey
-struct NodeBin <: FieldVector{3,Float64}
+struct NodeBin
     discrete_x::Float64
     discrete_y::Float64
     discrete_θ::Float64
@@ -160,19 +160,19 @@ function (obj::heuristic_cost)(vehicle_state)
 end
 
 
-function main()
-    e = ExperimentEnvironment(100.0,100.0,ObstacleLocation[ObstacleLocation(30.0,30.0,15.0),ObstacleLocation(70.0,60.0,15.0)])
-    holonomic_vs = VehicleState(10.0,20.0,0.0)
-    holonomic_va = get_vehicle_actions(45,5)
-    g = Location(75.0,95.0)
-    nc = node_cost(0.5,e)
-    hc = heuristic_cost(g)
-    cs = hybrid_astar_search(g, holonomic_vs, holonomic_va, holonomic_vehicle_dynamics, get_node_key, nc, hc)
-    return cs
-end
-
+e = ExperimentEnvironment(100.0,100.0,ObstacleLocation[ObstacleLocation(30.0,30.0,15.0),ObstacleLocation(70.0,60.0,15.0)])
+holonomic_vs = VehicleState(10.0,20.0,0.0)
+holonomic_va = get_vehicle_actions(45,5)
+g = Location(75.0,95.0)
+nc = node_cost(0.5,e)
+hc = heuristic_cost(g)
+cs = hybrid_astar_search(g, holonomic_vs, holonomic_va, holonomic_vehicle_dynamics, get_node_key, nc, hc)
+p = get_path(holonomic_vs, cs, holonomic_vehicle_dynamics)
 
 #=
+p = get_path(holonomic_vs, cs, holonomic_vehicle_dynamics)
+x = [s.x for s in p]; y = [s.y for s in p]
+plot(x,y)
 using JET
 using BenchmarkTools
 @report_opt hybrid_astar_search(g, holonomic_vs, holonomic_va, holonomic_vehicle_dynamics, get_node_key, nc, hc)
