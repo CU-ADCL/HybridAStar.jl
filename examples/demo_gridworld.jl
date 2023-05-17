@@ -8,9 +8,8 @@ dynamics(state, action) = state + SA[cosd(action), sind(action)]
 node_key(state) = round.(Int, state)
 
 function node_g(old_state, new_state, action, depth)
-    if new_state in Disk(2.0, SA[5.0, 8.0])
+    if new_state in Disk(2.0, SA[6.0, 5.0])
         return Inf
-
     end
     return 1.0
 end
@@ -18,9 +17,8 @@ end
 node_h(state) = norm(state - goal_center)
 
 start_state = SA[2.0, 2.0]
-goal_center = SA[9.0, 9.0]
 actions = [0, 30, 60, 90, 120, 150, 180] # angles that the vehicle can travel
-goal = Disk(1.0, goal_center)
+goal = Disk(1.0, SA[9.0,9.0])
 cs = hybrid_astar_search(goal, start_state, actions, dynamics, node_key, node_g, node_h)
 p = get_path(start_state, cs, dynamics)
 
