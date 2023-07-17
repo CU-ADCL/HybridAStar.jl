@@ -1,7 +1,7 @@
-function get_path(start_state, control_sequence, dynamics)
+function get_path(start_state, action_sequence, dynamics)
     path = Array{typeof(start_state),1}([start_state])
     current_state = start_state
-    for action in control_sequence
+    for action in action_sequence
         new_state = dynamics(current_state,action)
         push!(path, new_state)
         current_state = new_state
@@ -9,13 +9,13 @@ function get_path(start_state, control_sequence, dynamics)
     return path
 end
 
-function get_control_sequence(current_node::GraphNode, nodes_dict)
-    control_sequence = typeof(current_node.parent_action)[]
+function get_action_sequence(current_node::GraphNode, nodes_dict)
+    action_sequence = typeof(current_node.parent_action)[]
     while(current_node.parent_key!==nothing)
-        push!(control_sequence, current_node.parent_action)
+        push!(action_sequence, current_node.parent_action)
         current_node = nodes_dict[current_node.parent_key]
     end
-    return reverse(control_sequence)
+    return reverse(action_sequence)
 end
 
 function hybrid_astar_search(goal, agent_state, agent_actions, agent_dynamics, node_key, node_cost, heuristic_cost; planning_time=0.2, λ=0.99)
@@ -44,7 +44,7 @@ function hybrid_astar_search(goal, agent_state, agent_actions, agent_dynamics, n
 
         if( in(current_node.state,goal) )
             # println("Time taken to find the Hybrid A* path: ", time()- start_time)
-            return get_control_sequence(current_node, nodes_dict)
+            return get_action_sequence(current_node, nodes_dict)
         end
 
         current_agent_state = current_node.state
