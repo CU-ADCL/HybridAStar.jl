@@ -1,5 +1,6 @@
 # HybridAStar.jl
-Julia package for implementing Hybrid A* algorithm
+
+# Julia package for implementing Hybrid A* algorithm
 
 Information on Hybrid A* algorithm can be found in these papers
 
