@@ -11,7 +11,7 @@ end
 
 function get_control_sequence(current_node::GraphNode, nodes_dict)
     control_sequence = typeof(current_node.parent_action)[]
-    while(current_node.parent_key!=nothing)
+    while(current_node.parent_key!==nothing)
         push!(control_sequence, current_node.parent_action)
         current_node = nodes_dict[current_node.parent_key]
     end

@@ -63,7 +63,7 @@ function holonomic_vehicle_dynamics(vehicle_state::VehicleState,delta_angle)
     vehicle_y = vehicle_state.y
     vehicle_theta = vehicle_state.theta
     if(vehicle_speed == 0.0)
-        return VehicleState(vehicle_x,vehicle_y,vehicle_theta,vehicle_speed)
+        return VehicleState(vehicle_x,vehicle_y,vehicle_theta)
     else
         new_theta = wrap_between_0_and_2Pi(vehicle_theta + delta_angle)
         new_x = vehicle_x + vehicle_speed*cos(new_theta)*time_duration
