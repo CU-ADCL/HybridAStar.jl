@@ -8,13 +8,13 @@ dynamics(state, action) = state + SA[cosd(action), sind(action)]
 node_key(state) = round.(Int, state)
 
 function node_g(old_state, new_state, action, depth)
-    if new_state in Disk(2.0, SA[6.0, 5.0])
+    if new_state in Disk(2.0, SA[6.0, 6.0])
         return Inf
     end
     return 1.0
 end
 
-node_h(state) = norm(state - goal_center)
+node_h(state) = norm(state - SA[6.0, 6.0])
 
 start_state = SA[2.0, 2.0]
 actions = [0, 30, 60, 90, 120, 150, 180] # angles that the vehicle can travel
