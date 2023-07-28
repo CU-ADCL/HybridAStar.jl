@@ -1,7 +1,7 @@
 name = "HybridAStar"
 uuid = "104e9f6a-5342-4eaa-ade7-423d5ab614aa"
 authors = ["himanshugupta1009 <himanshu.gupta@colorado.edu>"]
-version = "0.1.0"
+version = "1.0.0"
 
 [deps]
 DataStructures = "864edb3b-99cc-5e75-8d2d-829cb0a9cfe8"
