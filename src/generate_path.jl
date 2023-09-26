@@ -15,9 +15,9 @@ The function returns the path followed by the agent from a given starting state 
 
 # Arguments
 
-- start_state -> specifies the agent's starting state
-- action_sequence -> array of agent actions to be applied in sequence
-- dynamics -> function describing the dynamics of the agent. It takes in the state and an action as inputs and outputs the next resulting state.
+- `start_state` -> specifies the agent's starting state
+- `action_sequence` -> array of agent actions to be applied in sequence
+- `dynamics` -> function describing the dynamics of the agent. It takes in the state and an action as inputs and outputs the next resulting state.
 ```julia-repl
         next_state = dynamics(state,action)
 ```
@@ -51,31 +51,31 @@ The function returns a sequence of actions that can be applied to the agent to t
 
 # Arguments
 
-- goal -> specifies the agent's goal location/set
-- start_state -> specifies the agent's starting state
-- actions -> an array of available agent actions
-- dynamics -> function describing the dynamics of the agent. It takes in the state and an action as inputs and outputs the next resulting state.
+- `goal` -> specifies the agent's goal location/set
+- `start_state` -> specifies the agent's starting state
+- `actions` -> an array of available agent actions
+- `dynamics` -> function describing the dynamics of the agent. It takes in the state and an action as inputs and outputs the next resulting state.
 ```julia-repl
         next_state = dynamics(state,action)
 ```
-- discretization -> function that is used to discretize the continuous agent state. It takes in the state as an input and outputs the corresponding discrete value.
+- `discretization` -> function that is used to discretize the continuous agent state. It takes in the state as an input and outputs the corresponding discrete value.
 ```julia-repl
         discrete_key = discretization(state)
 ```
-- g -> function that calculates the cost of transitioning from one state to the other. It takes in the old_state, the new_state, the applied action and the corresponding depth of the new_state in the graph as inputs and outputs the corresponding cost. To penalize collision with obstacles in the environment, user should reflect it in this function.
+- `g` -> function that calculates the cost of transitioning from one state to the other. It takes in the old state, the new state, the applied action and the depth of the new state in the graph as inputs and outputs the corresponding cost. To penalize collision with obstacles in the environment, user should reflect it in this function.
 ```julia-repl
         cost = g(old_state, new_state, action, new_depth)
 ```
-- h -> function that calculates the heuristic cost of reaching the goal from any given state. It takes in the state as an input and outputs the corresponding heuristic cost.
+- `h` -> function that calculates the heuristic cost of reaching the goal from any given state. It takes in the state as an input and outputs the corresponding heuristic cost.
 ```julia-repl
         heuristic_cost = h(state)
 ```
-- planning_time (optional; default_value=0.2) -> specifies the planning time allocated to find a feasible path \n
-- lambda (optional; default_value=1.0) -> specifies the discounting factor to weigh initial steps of the agent's trajectory more than the later steps \n
+- `planning_time` (optional; default_value=0.2) -> specifies the planning time allocated to find a feasible path
+- `lambda` (optional; default_value=1.0) -> specifies the discounting factor to weigh initial steps of the agent's trajectory more than the later steps \n
 
 # Output
 
-- [if path found] array of agent actions that can guide the agent from its start state to its goal region (if path found)\n
+- [if path found] array of agent actions that can guide the agent from its start state to its goal region
 - [if path not found] empty array
 
 # Example
