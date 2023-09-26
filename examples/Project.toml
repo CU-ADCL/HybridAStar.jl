@@ -1,3 +1,4 @@
 [deps]
 DomainSets = "5b8099bc-c8ec-5219-889f-1d9e522a28bf"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
