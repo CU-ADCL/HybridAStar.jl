@@ -45,7 +45,7 @@ end
 
 
 """
-    hybrid_astar_search(goal, start_state, actions, dynamics, discretization, g, h; planning_time=1.0, λ=0.95)
+    hybrid_astar_search(goal, start_state, actions, dynamics, discretization, g, h; planning_time=1.0, lambda=0.95)
 
 The function returns a sequence of actions that can be applied to the agent to take it from its starting position to its goal position.
 
@@ -70,8 +70,8 @@ The function returns a sequence of actions that can be applied to the agent to t
 ```julia-repl
         heuristic_cost = h(state)
 ```
-- `planning_time` (optional; default_value=0.2) -> specifies the planning time allocated to find a feasible path
-- `lambda` (optional; default_value=1.0) -> specifies the discounting factor to weigh initial steps of the agent's trajectory more than the later steps \n
+- `planning_time` (keyword argument; optional; default_value=0.2) -> specifies the planning time allocated to find a feasible path
+- `lambda` (keyword argument; optional; default_value=1.0) -> specifies the discounting factor to weigh initial steps of the agent's trajectory more than the later steps \n
 
 # Output
 
@@ -80,10 +80,10 @@ The function returns a sequence of actions that can be applied to the agent to t
 
 # Example
 ```julia-repl
-action_sequence = hybrid_astar_search(goal, start_state, actions, dynamics, discretization, g, h; planning_time=1.0, λ=0.95)
+action_sequence = hybrid_astar_search(goal, start_state, actions, dynamics, discretization, g, h; planning_time=1.0, lambda=0.95)
 ```
 """
-function hybrid_astar_search(goal, agent_state, agent_actions, agent_dynamics, node_key, node_cost, heuristic_cost; planning_time=0.2, λ=0.99)
+function hybrid_astar_search(goal, agent_state, agent_actions, agent_dynamics, node_key, node_cost, heuristic_cost; planning_time=0.2, lambda=0.99)
 
     # Initialize variables
     depth = 0       #Variable to keep track of path length
@@ -123,7 +123,7 @@ function hybrid_astar_search(goal, agent_state, agent_actions, agent_dynamics, n
                 continue
             else
                 #Calculate actual cost of the new node
-                g = current_node.actual_cost + (λ^new_depth)*node_cost(current_agent_state,new_agent_state,action,new_depth)
+                g = current_node.actual_cost + (lambda^new_depth)*node_cost(current_agent_state,new_agent_state,action,new_depth)
                 #Calculate heuristic cost of the new node
                 h = heuristic_cost(new_agent_state)
                 #Define new graph node
