@@ -59,9 +59,9 @@ Function parameters:
   ```
 
 
-### A simple example to find path for a holonomic vehicle using the Hybrid A* algorithm can be found in examples/demo_holonomic_vehicle.jl
+#### A simple example to find path for a holonomic vehicle using the Hybrid A* algorithm can be found in examples/demo_holonomic_vehicle.jl
 
-### A more complex example of finding a drivable path for a Dubin's car using the Hybrid A* algorithm can be found in examples/demo_dubin_car.jl
+#### A more complex example of finding a drivable path for a Dubin's car using the Hybrid A* algorithm can be found in examples/demo_dubin_car.jl
 
 
 In case of any queries, feel free to raise a Github Issue or reach out to the author via email at himanshu.gupta@colorado.edu.
