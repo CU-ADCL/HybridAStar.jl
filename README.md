@@ -12,7 +12,7 @@ This is a Julia package for using the Hybrid A* algorithm. Hybrid A* algorithm i
 
 ## This package provides users with the following functions:
 
-### 1) hybrid_astar_search
+### 1) `hybrid_astar_search`
 
     hybrid_astar_search(goal, start_state, actions, dynamics, discretization, g, h; planning_time=0.2, lambda=1.0)
 
