@@ -38,28 +38,31 @@ The function returns a sequence of actions that can be applied to the agent to t
 - [if path found] array of agent actions that can guide the agent from its start state to its goal region
 - [if path not found] empty array
 
-### 2) get_path
-    returns the path followed by the agent from a given starting state under a given dynamics function and given sequence of actions.
+### 2) `get_path`
+
+    get_path(start_state, action_sequence, dynamics)
+
+The function returns the path followed by the agent from a given starting state under a given dynamics function and given sequence of actions.
     
-  Function parameters:
-  * *start_state* -> specifies the agent's starting state. 
-  * *action_sequence* -> array of agent actions to be applied in sequence 
-  * dynamics -> function describing the dynamics of the agent. It takes in the state and an action as inputs and outputs the next resulting state. 
-    * ```next_state = dynamics(state,action)```
+  #### Arguments
+  
+  - `start_state::Any`: specifies the agent's starting state. 
+  - `action_sequence::AbstractVector`: array of agent actions to be applied in sequence 
+  - `dynamics::Function`: function describing the dynamics of the agent. It takes in the state and an action as inputs and outputs the next resulting state. 
+     It will be called like this: `next_state = dynamics(state,action)`
 
-  Output: 
-  * array of agent states from its start state to the final state after applying all the actions in the action_sequence  
-
-  Usage:
-
-  ```
-  agent_path = get_path(start_state, action_sequence, dynamics)
-  ```
+#### Output
+  - array of agent states from its start state to the final state after applying all the actions in the action_sequence  
 
 
-#### A simple example to find path for a holonomic vehicle using the Hybrid A* algorithm can be found in examples/demo_holonomic_vehicle.jl
+***
 
-#### A more complex example of finding a drivable path for a Dubin's car using the Hybrid A* algorithm can be found in examples/demo_dubin_car.jl
+
+#### Examples
+
+1) A simple example to find path for a holonomic vehicle using the Hybrid A* algorithm can be found in examples/demo_holonomic_vehicle.jl
+
+2) A more complex example of finding a drivable path for a Dubin's car using the Hybrid A* algorithm can be found in examples/demo_dubin_car.jl
 
 
 In case of any queries, feel free to raise a Github Issue or reach out to the author via email at himanshu.gupta@colorado.edu.
