@@ -45,33 +45,24 @@ end
 
 
 """
-    hybrid_astar_search(goal, start_state, actions, dynamics, discretization, g, h; planning_time=1.0, lambda=0.95)
+    hybrid_astar_search(goal, start_state, actions, dynamics, discretization, g, h; planning_time=0.2, lambda=1.0)
 
 The function returns a sequence of actions that can be applied to the agent to take it from its starting position to its goal position.
 
 # Arguments
 
-- `goal` -> specifies the agent's goal location/set
-- `start_state` -> specifies the agent's starting state
-- `actions` -> an array of available agent actions
-- `dynamics` -> function describing the dynamics of the agent. It takes in the state and an action as inputs and outputs the next resulting state.
-```julia-repl
-        next_state = dynamics(state,action)
-```
-- `discretization` -> function that is used to discretize the continuous agent state. It takes in the state as an input and outputs the corresponding discrete value.
-```julia-repl
-        discrete_key = discretization(state)
-```
-- `g` -> function that calculates the cost of transitioning from one state to the other. It takes in the old state, the new state, the applied action and the depth of the new state in the graph as inputs and outputs the corresponding cost. To penalize collision with obstacles in the environment, user should reflect it in this function.
-```julia-repl
-        cost = g(old_state, new_state, action, new_depth)
-```
-- `h` -> function that calculates the heuristic cost of reaching the goal from any given state. It takes in the state as an input and outputs the corresponding heuristic cost.
-```julia-repl
-        heuristic_cost = h(state)
-```
-- `planning_time` (keyword argument; optional; default_value=0.2) -> specifies the planning time allocated to find a feasible path
-- `lambda` (keyword argument; optional; default_value=1.0) -> specifies the discounting factor to weigh initial steps of the agent's trajectory more than the later steps \n
+- `goal::Any`: specifies the agent's goal location/set; Any object that supports `in(goal, state)` can be used.
+- `start_state::Any`: specifies the agent's starting state
+- `actions::AbstractVector`: list of available agent actions
+- `dynamics::Function`: function describing the dynamics of the agent. It takes in the state and an action as inputs and outputs the next resulting state. It will be called like this: `next_state = dynamics(state, action)`
+- `discretization::Function`: function that is used to discretize the continuous agent state. It takes in the state as an input and outputs the corresponding discrete value. It will be called like this: `discrete_key = discretization(state)`
+- `g::Function`: function that calculates the cost of transitioning from one state to the other. It takes in the old state, the new state, the applied action and the depth of the new state in the graph as inputs and outputs the corresponding cost. To penalize collision with obstacles in the environment, user should reflect it in this function. `g` will be called like this: `cost = g(old_state, new_state, action, new_depth)`
+- `h::Function`: function that calculates the heuristic cost of reaching the goal from any given state. It takes in the state as an input and outputs the corresponding heuristic cost. It will be called like this: `heuristic_cost = h(state)`
+
+# Keyword Arguments
+
+- `planning_time::Real=0.2`: specifies the planning time in seconds allocated to find a feasible path
+- `lambda::Real=0.99`: specifies the discounting factor to weigh initial steps of the agent's trajectory more than the later steps
 
 # Output
 
@@ -79,8 +70,29 @@ The function returns a sequence of actions that can be applied to the agent to t
 - [if path not found] empty array
 
 # Example
-```julia-repl
-action_sequence = hybrid_astar_search(goal, start_state, actions, dynamics, discretization, g, h; planning_time=1.0, lambda=0.95)
+```jldoctest
+using LinearAlgebra
+using StaticArrays: SA
+using DomainSets: Disk
+using HybridAStar: hybrid_astar_search,get_path
+
+dynamics(state, action) = state + SA[cosd(action), sind(action)]
+
+node_key(state) = round.(Int, state)
+
+function node_g(old_state, new_state, action, depth)
+    if new_state in Disk(2.0, SA[6.0, 6.0])
+        return Inf
+    end
+    return 1.0
+end
+
+node_h(state) = norm(state - SA[6.0, 6.0])
+
+start_state = SA[2.0, 2.0]
+actions = [0, 30, 60, 90, 120, 150, 180] # angles that the vehicle can travel
+goal = Disk(1.0, SA[9.0,9.0])
+cs = hybrid_astar_search(goal, start_state, actions, dynamics, node_key, node_g, node_h)
 ```
 """
 function hybrid_astar_search(goal, agent_state, agent_actions, agent_dynamics, node_key, node_cost, heuristic_cost; planning_time=0.2, lambda=0.99)
